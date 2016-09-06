@@ -9,10 +9,10 @@ from scipy.signal import resample
 def main():
     pwd = str(os.getcwd())
     # data location, relative.
-    dir = '/data/train_1/'
+    dir = '/../data/train_1/'
     # define test file, layout is from when i wanted to iterate over all files
     # to run over all files change line to '*.mat'
-    file_type = '1_78_1.mat'
+    file_type = '1_78_0.mat'
 
     file_list = glob.glob(pwd+dir+file_type)
     for f in file_list:
@@ -28,9 +28,13 @@ def main():
         channels_data = mat['dataStruct'][0][0][0]
         # resample file
         rs_data = resample(channels_data, 3600, axis=0)
-        
+
         df = pandas.DataFrame(rs_data, columns=headers)
-        print(df)
+
+        print df.describe()
+
+        #print(df)
+
         charts = Highchart()
         
         options = {'chart': {'type': 'line'}, 'title': {'text': 'test'},
