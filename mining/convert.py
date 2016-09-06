@@ -8,15 +8,20 @@ from scipy.signal import resample
 
 def main():
     pwd = str(os.getcwd())
+    home = os.path.abspath(os.path.join(pwd, os.pardir))
     # data location, relative.
     dir = '/data/train_1/'
     # define test file, layout is from when i wanted to iterate over all files
     # to run over all files change line to '*.mat'
     file_type = '1_78_1.mat'
 
-    file_list = glob.glob(pwd+dir+file_type)
+    file_list = glob.glob(home+dir+file_type)
     for f in file_list:
+
         name = f[:-4]
+        name = name.split('/')
+        name = name[len(name)-1]
+
         # load .mat file
         mat = scipy.io.loadmat(f)
         headers = ['channel0', 'channel1', 'channel2', 'channel3',
@@ -30,7 +35,7 @@ def main():
         rs_data = resample(channels_data, 3600, axis=0)
         
         df = pandas.DataFrame(rs_data, columns=headers)
-        print(df)
+
         charts = Highchart()
         
         options = {'chart': {'type': 'line'}, 'title': {'text': 'test'},
